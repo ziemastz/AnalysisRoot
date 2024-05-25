@@ -33,8 +33,7 @@ int main(int argc, char **argv)
     Double_t tot_edep_cup = 0.;
     
     TTree *HITS = (TTree*)file.Get("Cocktail");
-    TTree *vialHITS = (TTree*)file.Get("Vial");
-    TTree *cupHITS = (TTree*)file.Get("Cup");
+
     // Get data from from HITS tree
     HITS->SetBranchAddress("EventID",&eventID);		                    // event ID ==> entry
     HITS->SetBranchAddress("TrackID",&trackID);
@@ -79,64 +78,6 @@ int main(int argc, char **argv)
     fprintf(reportFile,"Number of secendary particles in cocktail = %i\n",s_c);
     fprintf(reportFile,"Deposited energy in cocktail 2nd = %f keV\n",s_edep_cocktail*1000);
      
-     if(true) {
-        vialHITS->SetBranchAddress("EventID",&eventID);		                    // event ID ==> entry
-    vialHITS->SetBranchAddress("Edep",&edep_vial);
-    vialHITS->BuildIndex("EventID");
-    
-    nevent = static_cast<Int_t>(vialHITS->GetEntries());
-    fprintf(reportFile,"\nNEVENT = %i\n",nevent);
-    if(nevent > 0) {
-        index = (TTreeIndex*)vialHITS->GetTreeIndex();
-    current_eventID = -1;
-    id = 0;
-    for (  int i = 0; i <index->GetN(); i++ )
-    {
-        Long64_t local = vialHITS->LoadTree(index->GetIndex()[i]);
-        vialHITS->GetEvent(local);
-        if(current_eventID != eventID) {
-            id++;
-            current_eventID = eventID;
-        }
-        
-        //total deposited energy in vial
-        tot_edep_vial += edep_vial;
-    }
-    fprintf(reportFile,"Decay event in vial = %i\n",id);
-    fprintf(reportFile,"Total deposited energy in vial = %f keV\n",tot_edep_vial*1000);
-    }
-    
-
-    cupHITS->SetBranchAddress("EventID",&eventID);		                    // event ID ==> entry
-    cupHITS->SetBranchAddress("Edep",&edep_cup);
-    cupHITS->BuildIndex("EventID");
-
-    
-    nevent = static_cast<Int_t>(cupHITS->GetEntries());
-    fprintf(reportFile,"\nNEVENT = %i\n",nevent);
-    if(nevent > 0) {
-         index = (TTreeIndex*)cupHITS->GetTreeIndex();
-    current_eventID = -1;
-    id = 0;
-    for (  int i = 0; i <index->GetN(); i++ )
-    {
-        Long64_t local = cupHITS->LoadTree(index->GetIndex()[i]);
-        cupHITS->GetEvent(local);
-        if(current_eventID != eventID) {
-            id++;
-            current_eventID = eventID;
-        }
-        
-        //total deposited energy in vial
-        tot_edep_cup += edep_cup;
-    }
-    fprintf(reportFile,"Decay event in cup = %i\n",id);
-    fprintf(reportFile,"Total deposited energy in cup = %f keV\n",tot_edep_cup*1000);
-    }
-   
-    }
-    
-
     fclose(reportFile);
     delete reportFile;
     fclose(energyFile);
