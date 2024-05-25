@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.0...3.29)
 project(AnalysisRoot VERSION 0.1.0)
 
-find_package(ROOT 6.26 CONFIG REQUIRED)
+find_package(ROOT 6.30 CONFIG REQUIRED)
 
 include("${ROOT_USE_FILE}")
 
